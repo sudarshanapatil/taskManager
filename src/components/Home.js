@@ -13,7 +13,7 @@ class Home extends React.Component {
       runningTasks: [],
       waitingTasks: 0,
       timerRunning: false,
-      taskToBeadded: 1
+      taskToBeAdded: 1
     }
   }
 
@@ -42,20 +42,19 @@ class Home extends React.Component {
   }
 
   setTask = (e) => {
-    this.setState({ taskToBeadded: parseInt(e.target.value) })
+    this.setState({ taskToBeAdded: parseInt(e.target.value) })
   }
 
   scheduleTask = () => {
-    let { runningTasks, totalServer, waitingTasks, taskToBeadded } = this.state;
-    const toBeScheduled = Math.min(taskToBeadded, totalServer - runningTasks.length);
+    let { runningTasks, totalServer, waitingTasks, taskToBeAdded } = this.state;
+    const toBeScheduled = Math.min(taskToBeAdded, totalServer - runningTasks.length);
     if (runningTasks.length < totalServer) {
       this.startNewTask(toBeScheduled);
       waitingTasks = waitingTasks - toBeScheduled;
     }
-    if (waitingTasks + taskToBeadded <= 0)
+    if (waitingTasks + taskToBeAdded <= 0)
       waitingTasks = 0;
-    else
-      waitingTasks = waitingTasks + taskToBeadded;
+      waitingTasks = waitingTasks + taskToBeAdded;
 
     this.setState({ waitingTasks: waitingTasks });
 
@@ -112,7 +111,7 @@ class Home extends React.Component {
                 placeholder="tasks"
                 aria-describedby="basic-addon2"
                 type="number"
-                value={this.state.taskToBeadded}
+                value={this.state.taskToBeAdded}
                 onChange={(e) => this.setTask(e)}
               />
               <InputGroup.Append>
