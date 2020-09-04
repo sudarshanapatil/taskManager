@@ -18,13 +18,15 @@ class Home extends React.Component {
   }
 
   addServer = () => {
-    let { totalServer, runningTasks, waitingTasks } = this.state;
-    console.log(totalServer, runningTasks, waitingTasks)
-    this.setState({
-      totalServer: totalServer + 1,
-      runningTasks: waitingTasks ? [...runningTasks, taskLength] : runningTasks,
-      waitingTasks: waitingTasks ? waitingTasks - 1 : waitingTasks
-    });
+    if (this.state.totalServer < 10) {
+      let { totalServer, runningTasks, waitingTasks } = this.state;
+      console.log(totalServer, runningTasks, waitingTasks)
+      this.setState({
+        totalServer: totalServer + 1,
+        runningTasks: waitingTasks ? [...runningTasks, taskLength] : runningTasks,
+        waitingTasks: waitingTasks ? waitingTasks - 1 : waitingTasks
+      });
+    }
   }
 
   deleteTask = () => {
@@ -71,6 +73,7 @@ class Home extends React.Component {
         let { runningTasks, totalServer, deleteServer, waitingTasks } = this.state;
         const newRunning = runningTasks.map(remainingTime => remainingTime - 1)
           .filter(remainingTime => remainingTime !== 0);
+        //if any task is completed from running tasks
         if (newRunning.length !== runningTasks.length) {
           let maxServerToBeDeleted = Math.min(deleteServer, totalServer - newRunning.length);
           totalServer = totalServer - maxServerToBeDeleted;
@@ -80,12 +83,13 @@ class Home extends React.Component {
             totalServer,
             deleteServer
           });
+          //if server is available and tasks are waiting for server
           if (waitingTasks > 0 && totalServer > newRunning.length) {
             const maxTaskToBeStarted = Math.min(waitingTasks, totalServer - newRunning.length);
             newRunning.push(...Array(maxTaskToBeStarted).fill(taskLength));
             this.setState({ runningTasks: newRunning });
             this.setState({ waitingTasks: waitingTasks - maxTaskToBeStarted });
-          } else if (newRunning.length === 0) {
+          } else if (newRunning.length === 0) {             //all the tasks are completed
             clearInterval(interval);
             this.setState({ timerRunning: false, runningTasks: [] });
           }
