@@ -1,0 +1,54 @@
+.title{
+  background-color: rgb(34, 68, 219);
+  align-items: center;
+  justify-content: center;
+  color:white;
+  text-align: center;
+  padding: 10px;
+}
+
+.serverButtons{
+  display: flex;
+  margin: 20px;  
+  padding: 10px,0;
+  /* align-items: center;  */
+  /* justify-content: space-between; */
+}
+
+.serverButtons.button{
+  margin:20px
+}
+
+.wrapperDiv{
+  margin-left: 100px;
+  margin-right: 100px;
+  margin-bottom: 40px;
+}
+
+.waitingTasks{
+  background-color: rgb(192, 212, 228);
+  border-color:rgb(34, 68, 219);
+  width: 100%;
+  margin: 10px;
+  border-radius: 5px;
+  /* align-items: flex-end; */
+  display: flex;
+  flex-direction: row;
+}
+
+.taskWrapper{
+  padding: 15px;
+}
+
+.close{  
+    width: 35px;
+    height: 35px;
+    display:block;
+    background-color: rgb(15, 43, 165);
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255,255,255, 1)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M8 8 L24 24 M8 24 L24 8'/%3E%3C/svg%3E");
+}
+
+.addTask{ 
+  margin: 20px;
+  padding: 5px;
+  width:300px }
