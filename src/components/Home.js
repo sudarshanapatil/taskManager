@@ -19,6 +19,7 @@ class Home extends React.Component {
 
   addServer = () => {
     let { totalServer, runningTasks, waitingTasks } = this.state;
+    console.log(totalServer, runningTasks, waitingTasks)
     this.setState({
       totalServer: totalServer + 1,
       runningTasks: waitingTasks ? [...runningTasks, taskLength] : runningTasks,
@@ -42,7 +43,8 @@ class Home extends React.Component {
   }
 
   setTask = (e) => {
-    this.setState({ taskToBeAdded: parseInt(e.target.value) })
+    if (parseInt(e.target.value) > 0)
+      this.setState({ taskToBeAdded: parseInt(e.target.value) })
   }
 
   scheduleTask = () => {
@@ -54,6 +56,7 @@ class Home extends React.Component {
     }
     if (waitingTasks + taskToBeAdded <= 0)
       waitingTasks = 0;
+    else
       waitingTasks = waitingTasks + taskToBeAdded;
 
     this.setState({ waitingTasks: waitingTasks });
@@ -70,13 +73,16 @@ class Home extends React.Component {
           .filter(remainingTime => remainingTime !== 0);
         if (newRunning.length !== runningTasks.length) {
           let maxServerToBeDeleted = Math.min(deleteServer, totalServer - newRunning.length);
+          totalServer = totalServer - maxServerToBeDeleted;
+          deleteServer = deleteServer - maxServerToBeDeleted;
+
           this.setState({
-            totalServer: totalServer - maxServerToBeDeleted,
-            deleteServer: deleteServer - maxServerToBeDeleted
+            totalServer,
+            deleteServer
           });
           if (waitingTasks > 0 && totalServer > newRunning.length) {
             const maxTaskToBeStarted = Math.min(waitingTasks, totalServer - newRunning.length);
-            newRunning.push(Array(maxTaskToBeStarted).fill(0).map(() => taskLength));
+            newRunning.push(...Array(maxTaskToBeStarted).fill(taskLength));
             this.setState({ runningTasks: newRunning });
             this.setState({ waitingTasks: waitingTasks - maxTaskToBeStarted });
           } else if (newRunning.length === 0) {
@@ -96,16 +102,22 @@ class Home extends React.Component {
         <div className='title' >
           Task Manager
         </div>
-        <div className='wrapperDiv'>
-          <div className='serverButtons'>
-            <Button style={{ marginRight: 10 }} onClick={() => this.addServer()}>
+        <div className='wrapper-div'>
+          <div className='server-buttons'>
+            <button className='add-server' onClick={() => this.addServer()}>
               Add Server
-          </Button>
-            <Button onClick={() => this.removeServer()} disabled={(totalServer - deleteServer) <= 1}>
+            </button>
+            <button className='remove-server' onClick={() => this.removeServer()} disabled={(totalServer - deleteServer) <= 1}>
               Remove Server
-            </Button>
+            </button>
+            <div className='server-info'>
+              Total Server - {this.state.totalServer}
+            </div>
+            <div className='server-info'>
+              Server to be deleted - {this.state.deleteServer}
+            </div>
           </div>
-          <div className='addTask'>
+          <div className='add-task'>
             <InputGroup className="mb-3">
               <FormControl
                 placeholder="tasks"
@@ -115,32 +127,45 @@ class Home extends React.Component {
                 onChange={(e) => this.setTask(e)}
               />
               <InputGroup.Append>
-                <Button variant="outline-secondary" onClick={() => this.scheduleTask()}>Add Task</Button>
+                <button className='task-input' onClick={() => this.scheduleTask()}>Add Task</button>
               </InputGroup.Append>
             </InputGroup>
           </div>
           <div>
           </div>
-          <div className='taskWrapper'>
-            <p>Total server available : {this.state.totalServer}</p>
-            Running tasks:
-            {this.state.runningTasks.map((remaining => (
+          <div className='task-wrapper'>
+            {(this.state.runningTasks.length > 0) && <div>
+              {this.state.runningTasks.map((remaining => (
+                <div>
+                  <ProgressBar
+                    style={{
+                      margin: 10, backgroundColor: 'white', borderStyle: 'solid',
+                      height: 40, borderColor: 'rgb(147, 112, 219)', borderWidth: 4
+                    }}
+                    label={`00:${remaining}`} now={100 - (remaining / taskLength) * 100} />
+                </div>
+              )))}
+            </div>
+            }
+            {(this.state.waitingTasks > 0) &&
               <div>
-                <ProgressBar style={{ margin: 10 }} label={`00:${remaining}`} now={100 - (remaining / taskLength) * 100} />
-              </div>
-            )))}
-            {(this.state.waitingTasks) &&
-              <div>
-                Waiting tasks:
                 {Array(this.state.waitingTasks).fill(this.state.waitingTasks).map(() => (
-                  <div className='waitingTasks' >
-                    <div className='waitingkkTasks'>
+                  <div className='waiting-task row'>
+                    <div sm={3} className='col-sm-11'>
+                      <ProgressBar style={{
+                        margin: 10, backgroundColor: 'white', borderStyle: 'solid',
+                        height: 40, borderColor: 'rgb(147, 112, 219)', borderWidth: 4
+                      }}
+                        now={0}></ProgressBar>
                     </div>
-                    <span className="close" onClick={() => this.deleteTask()}>
-                    </span>
+                    <div className='col-sm-1'>
+                      <span className="close" onClick={() => this.deleteTask()}>
+                      </span>
+                    </div>
                   </div>
                 ))}
-              </div>}
+              </div>
+            }
           </div>
         </div>
       </div>

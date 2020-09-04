@@ -1,5 +1,5 @@
 .title{
-  background-color: rgb(34, 68, 219);
+  background-color: rgb(147,112,219);
   align-items: center;
   justify-content: center;
   color:white;
@@ -7,7 +7,7 @@
   padding: 10px;
 }
 
-.serverButtons{
+.server-buttons{
   display: flex;
   margin: 20px;  
   padding: 10px,0;
@@ -19,15 +19,34 @@
   margin:20px
 }
 
-.wrapperDiv{
-  margin-left: 100px;
-  margin-right: 100px;
+.progress-bar{
+  background-color: rgb(147,112,219);
+  height:40px
+}
+
+.task-input{
+  background-color: rgb(147,112,219)!important;
+  border-radius: 6px;
+  border-color: rgb(147,112,219);
+  border-width: 4px;
+  border-style: solid;
+  color: white;
+}
+
+.myProgress { 
+  margin: 10px;
+  background-color:'white';
+  height:40px }
+
+.wrapper-div{
+  margin-left: 200px;
+  margin-right: 200px;
   margin-bottom: 40px;
 }
 
-.waitingTasks{
+.waiting-tasks{
   background-color: rgb(192, 212, 228);
-  border-color:rgb(34, 68, 219);
+  border-color:rgb(147,112,219);
   width: 100%;
   margin: 10px;
   border-radius: 5px;
@@ -36,24 +55,70 @@
   flex-direction: row;
 }
 
-.taskWrapper{
+.task-wrapper{
   padding: 15px;
 }
 
 .close{  
-    width: 35px;
-    height: 35px;
+    margin: 7px;
+    width: 40px;
+    height: 40px;
     display:block;
-    background-color: rgb(15, 43, 165);
+    background-color: rgb(147,112,219);
     background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255,255,255, 1)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M8 8 L24 24 M8 24 L24 8'/%3E%3C/svg%3E");
 }
 
-.addTask{ 
+.add-task{ 
   margin: 20px;
   padding: 5px;
   width:300px 
 }
 
-.waitingTaskTitle{
+.waiting-task-title{
   border-color: mediumblue;
 }
+
+.waiting-task{
+  margin: 10px;
+  display: flex;
+}
+
+.server-info{
+  text-align: center;
+  color:rgb(147,112,219);
+  /* align-items: center;
+  justify-content: center; */
+  border-radius: 5px;
+  padding: 10px;
+  height:60px;
+  border-color: rgb(147,112,219);
+  border-width: 2px;
+  border-style: solid;
+  margin-right: 10px;
+}
+
+.add-server{
+   margin-right: 10px;
+   background-color:rgb(147,112,219) ;
+   color:white;
+   border-radius: 5px;
+   padding: 12px;
+   height:60px;
+   text-align: center;
+   align-items: center;
+   border-color: rgb(147,112,219);
+  }
+ 
+.remove-server{
+  margin-right: 10px ;
+  background-color: white;
+  color:rgb(147,112,219);
+  border-radius: 5px;
+  height:60px;
+  border-style: solid;
+  border-color: rgb(147,112,219);
+  padding: 10px;
+  text-align: center;
+  justify-content: center;
+}  
+
