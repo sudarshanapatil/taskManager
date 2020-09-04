@@ -30,11 +30,13 @@ class Home extends React.Component {
   }
 
   removeServer = () => {
-    if (this.state.runningTasks.length < this.state.totalServer) {
-      this.setState({ totalServer: this.state.totalServer - 1 });
-    }
-    else {
-      this.setState({ deleteServer: this.state.deleteServer + 1 })
+    if (this.state.totalServer > 1) {
+      if (this.state.runningTasks.length < this.state.totalServer) {
+        this.setState({ totalServer: this.state.totalServer - 1 });
+      }
+      else {
+        this.setState({ deleteServer: this.state.deleteServer + 1 })
+      }
     }
   }
 
@@ -50,6 +52,14 @@ class Home extends React.Component {
     }
   }
 
+  allTasks = () => {
+    let count = 0;
+    while (count < this.state.taskToBeadded) {
+      this.scheduleTask();
+      count++;
+    }
+  }
+
   startNewTask = () => {
     if (this.state.timerRunning) {
       this.setState({ runningTasks: [...this.state.runningTasks, taskLength] });
@@ -59,8 +69,7 @@ class Home extends React.Component {
         let { runningTasks, totalServer, deleteServer, waitingTasks } = this.state;
         if (runningTasks.length === 0) {
           this.setState({
-            runningTasks: [...runningTasks, taskLength],
-            waitingTasks: this.state.taskToBeadded - 1
+            runningTasks: [...runningTasks, taskLength]
           });
 
         } else {
@@ -110,7 +119,7 @@ class Home extends React.Component {
                 onChange={(e) => this.setTask(e)}
               />
               <InputGroup.Append>
-                <Button variant="outline-secondary" onClick={() => this.scheduleTask()}>Add Task</Button>
+                <Button variant="outline-secondary" onClick={() => this.allTasks()}>Add Task</Button>
               </InputGroup.Append>
             </InputGroup>
           </div>
@@ -121,7 +130,7 @@ class Home extends React.Component {
             Running tasks:
             {this.state.runningTasks.map((remaining => (
               <div>
-                <ProgressBar style={{ margin: 10 }} label={`00:${remaining}`} now={100} />
+                <ProgressBar style={{ margin: 10 }} label={`00:${remaining}`} now={100 - (remaining / taskLength) * 100} />
               </div>
             )))}
             {(this.state.waitingTasks) &&
