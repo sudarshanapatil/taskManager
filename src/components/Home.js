@@ -1,5 +1,5 @@
 import React from 'react';
-import { ProgressBar, Button, InputGroup, FormControl } from 'react-bootstrap';
+import { ProgressBar, InputGroup, FormControl } from 'react-bootstrap';
 
 import '../styles/Home.css'
 const taskLength = 20;
@@ -111,10 +111,12 @@ class Home extends React.Component {
               Remove Server
             </button>
             <div className='server-info'>
-              Total Server - {this.state.totalServer}
+              Total Server
+              <p>{this.state.totalServer}</p>
             </div>
             <div className='server-info'>
-              Server to be deleted - {this.state.deleteServer}
+              Server To Be Deleted
+               <p>{this.state.deleteServer}</p>
             </div>
           </div>
           <div className='add-task'>

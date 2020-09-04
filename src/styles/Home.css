@@ -89,11 +89,12 @@
   /* align-items: center;
   justify-content: center; */
   border-radius: 5px;
-  padding: 10px;
-  height:60px;
+  padding: 2px;
+  width:20%;
+  height:10%;
   border-color: rgb(147,112,219);
   border-width: 2px;
-  border-style: solid;
+  /* border-style: solid; */
   margin-right: 10px;
 }
 
@@ -103,7 +104,7 @@
    color:white;
    border-radius: 5px;
    padding: 12px;
-   height:60px;
+   height:10%;
    text-align: center;
    align-items: center;
    border-color: rgb(147,112,219);
@@ -114,8 +115,8 @@
   background-color: white;
   color:rgb(147,112,219);
   border-radius: 5px;
-  height:60px;
-  border-style: solid;
+  height:10%;
+    border-style: solid;
   border-color: rgb(147,112,219);
   padding: 10px;
   text-align: center;
