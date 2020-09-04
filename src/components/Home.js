@@ -13,7 +13,7 @@ class Home extends React.Component {
       runningTasks: [],
       waitingTasks: 0,
       timerRunning: false,
-      taskToBeadded: 0
+      taskToBeadded: 1
     }
   }
 
@@ -21,7 +21,8 @@ class Home extends React.Component {
     let { totalServer, runningTasks, waitingTasks } = this.state;
     this.setState({
       totalServer: totalServer + 1,
-      runningTasks: waitingTasks ? [...runningTasks, taskLength] : runningTasks
+      runningTasks: waitingTasks ? [...runningTasks, taskLength] : runningTasks,
+      waitingTasks: waitingTasks ? waitingTasks - 1 : waitingTasks
     });
   }
 
@@ -45,58 +46,52 @@ class Home extends React.Component {
   }
 
   scheduleTask = () => {
-    if (this.state.runningTasks.length < this.state.totalServer) {
-      this.startNewTask();
-    } else {
-      this.setState({ waitingTasks: this.state.waitingTasks + 1 });
+    let { runningTasks, totalServer, waitingTasks, taskToBeadded } = this.state;
+    const toBeScheduled = Math.min(taskToBeadded, totalServer - runningTasks.length);
+    if (runningTasks.length < totalServer) {
+      this.startNewTask(toBeScheduled);
+      waitingTasks = waitingTasks - toBeScheduled;
     }
+    if (waitingTasks + taskToBeadded <= 0)
+      waitingTasks = 0;
+    else
+      waitingTasks = waitingTasks + taskToBeadded;
+
+    this.setState({ waitingTasks: waitingTasks });
+
   }
 
-  allTasks = () => {
-    let count = 0;
-    while (count < this.state.taskToBeadded) {
-      this.scheduleTask();
-      count++;
-    }
-  }
-
-  startNewTask = () => {
-    if (this.state.timerRunning) {
-      this.setState({ runningTasks: [...this.state.runningTasks, taskLength] });
-    } else {
+  startNewTask = (n) => {
+    this.setState({ runningTasks: [...this.state.runningTasks, ...Array(n).fill(taskLength)] });
+    if (!this.state.timerRunning) {
       this.setState({ timerRunning: true });
       const interval = setInterval(() => {
         let { runningTasks, totalServer, deleteServer, waitingTasks } = this.state;
-        if (runningTasks.length === 0) {
+        const newRunning = runningTasks.map(remainingTime => remainingTime - 1)
+          .filter(remainingTime => remainingTime !== 0);
+        if (newRunning.length !== runningTasks.length) {
+          let maxServerToBeDeleted = Math.min(deleteServer, totalServer - newRunning.length);
           this.setState({
-            runningTasks: [...runningTasks, taskLength]
+            totalServer: totalServer - maxServerToBeDeleted,
+            deleteServer: deleteServer - maxServerToBeDeleted
           });
-
-        } else {
-          const newRunning = runningTasks.map(remainingTime => remainingTime - 1)
-            .filter(remainingTime => remainingTime !== 0);
-          if (newRunning.length !== runningTasks.length) {
-            let maxServerToBeDeleted = Math.min(deleteServer, totalServer - newRunning.length);
-            this.setState({
-              totalServer: totalServer - maxServerToBeDeleted,
-              deleteServer: deleteServer - maxServerToBeDeleted
-            });
-            if (waitingTasks > 0 && totalServer > newRunning.length) {
-              const maxTaskToBeStarted = Math.min(waitingTasks, totalServer - newRunning.length);
-              newRunning.push(Array(maxTaskToBeStarted).fill(0).map(() => taskLength));
-              this.setState({ runningTasks: newRunning });
-              this.setState({ waitingTasks: waitingTasks - maxTaskToBeStarted });
-            } else if (newRunning.length === 0) {
-              clearInterval(interval);
-              this.setState({ timerRunning: false, runningTasks: [] });
-            }
+          if (waitingTasks > 0 && totalServer > newRunning.length) {
+            const maxTaskToBeStarted = Math.min(waitingTasks, totalServer - newRunning.length);
+            newRunning.push(Array(maxTaskToBeStarted).fill(0).map(() => taskLength));
+            this.setState({ runningTasks: newRunning });
+            this.setState({ waitingTasks: waitingTasks - maxTaskToBeStarted });
+          } else if (newRunning.length === 0) {
+            clearInterval(interval);
+            this.setState({ timerRunning: false, runningTasks: [] });
           }
-          this.setState({ runningTasks: newRunning });
         }
+        this.setState({ runningTasks: newRunning });
       }, 1000);
     }
   }
+
   render() {
+    const { totalServer, deleteServer } = this.state;
     return (
       <div>
         <div className='title' >
@@ -107,19 +102,21 @@ class Home extends React.Component {
             <Button style={{ marginRight: 10 }} onClick={() => this.addServer()}>
               Add Server
           </Button>
-            <Button onClick={() => this.removeServer()}>
+            <Button onClick={() => this.removeServer()} disabled={(totalServer - deleteServer) <= 1}>
               Remove Server
-          </Button>
+            </Button>
           </div>
           <div className='addTask'>
             <InputGroup className="mb-3">
               <FormControl
                 placeholder="tasks"
                 aria-describedby="basic-addon2"
+                type="number"
+                value={this.state.taskToBeadded}
                 onChange={(e) => this.setTask(e)}
               />
               <InputGroup.Append>
-                <Button variant="outline-secondary" onClick={() => this.allTasks()}>Add Task</Button>
+                <Button variant="outline-secondary" onClick={() => this.scheduleTask()}>Add Task</Button>
               </InputGroup.Append>
             </InputGroup>
           </div>

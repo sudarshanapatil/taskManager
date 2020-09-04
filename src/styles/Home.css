@@ -51,4 +51,9 @@
 .addTask{ 
   margin: 20px;
   padding: 5px;
-  width:300px }
+  width:300px 
+}
+
+.waitingTaskTitle{
+  border-color: mediumblue;
+}
